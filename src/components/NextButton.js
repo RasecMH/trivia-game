@@ -10,6 +10,7 @@ class NextButton extends Component {
           type="button"
           onClick={ onClick }
           data-testid="btn-next"
+          className='btn btn-outline btn-warning w-96 mt-3'
         >
           Next
         </button>

@@ -1,10 +1,10 @@
 import { LOGIN, SCORE } from '../Actions/actionTypes';
 
 const initialState = {
-  name: '',
+  name: 'Cesar',
   assertions: 0,
   score: 0,
-  gravatarEmail: '',
+  gravatarEmail: 'rasecmh0@gmail.com',
 };
 
 function loginReducer(state = initialState, action) {

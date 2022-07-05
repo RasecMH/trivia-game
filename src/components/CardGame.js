@@ -22,7 +22,7 @@ class CardGame extends React.Component {
   async componentDidMount() {
     const { history } = this.props;
     const ERROR_CODE = 3;
-    const CORRECT = 'correct-answer';
+    const CORRECT = 'btn-success';
     const token = getToken();
     const response = await getQuestion(token);
     if (response.response_code === ERROR_CODE) {
@@ -30,20 +30,22 @@ class CardGame extends React.Component {
       history.push('/');
     } else {
       const SORT_NUMBER = 0.5;
-      const answerReceived = response.results.map((result) => [
-        {
-          answer: result.correct_answer,
-          className: CORRECT,
-          dataTestId: CORRECT,
-          difficulty: result.difficulty,
-        },
-        ...result.incorrect_answers.map((wrong, i) => ({
-          answer: wrong,
-          className: 'wrong-answer',
-          dataTestId: `wrong-answer-${i}`,
-          difficulty: result.difficulty,
-        })),
-      ].sort(() => SORT_NUMBER - Math.random()));
+      const answerReceived = response.results.map((result) =>
+        [
+          {
+            answer: result.correct_answer,
+            className: CORRECT,
+            dataTestId: CORRECT,
+            difficulty: result.difficulty,
+          },
+          ...result.incorrect_answers.map((wrong, i) => ({
+            answer: wrong,
+            className: 'btn-error',
+            dataTestId: `wrong-answer-${i}`,
+            difficulty: result.difficulty,
+          })),
+        ].sort(() => SORT_NUMBER - Math.random())
+      );
 
       this.setState({ questions: response.results, answers: answerReceived });
     }
@@ -70,9 +72,10 @@ class CardGame extends React.Component {
       (prevState) => ({
         count: prevState.count + 1,
         isClicked: false,
+        timeOver: false,
         secondsAmount: 30,
       }),
-      this.startTimer(),
+      this.startTimer()
     );
     if (count === LAST_QUESTION) {
       // this.savePlayerInRanking();
@@ -127,33 +130,42 @@ class CardGame extends React.Component {
   // }
 
   render() {
-    const { questions, isClicked, secondsAmount, timeOver, answers, count } = this.state;
+    const { questions, isClicked, secondsAmount, timeOver, answers, count } =
+      this.state;
     return (
-      <div>
-        <p data-testid="meu-jogo">Meu Jogo</p>
-        <span data-testid="timer">{String(secondsAmount).padStart(2, '0')}</span>
+      <div className='leading-3'>
+        <p data-testid='meu-jogo'>Meu Jogo</p>
+        <span data-testid='timer'>
+          {String(secondsAmount).padStart(2, '0')}
+        </span>
         {questions.length && (
           <div>
-            <p data-testid="question-category">{questions[count].category}</p>
-            <p data-testid="question-text">{questions[count].question}</p>
-            <div data-testid="answer-options">
+            <p data-testid='question-category'>{questions[count].category}</p>
+            <p data-testid='question-text' className='leading-6'>{questions[count].question}</p>
+            <div
+              data-testid='answer-options'
+              className='flex items-center justify-center gap-2 flex-wrap'>
               {answers[count].map(
-                (question) => question.answer && (
-                  <button
-                    key={ question.dataTestId }
-                    type="button"
-                    data-testid={ question.dataTestId }
-                    onClick={ () => this.handleButtonClick(question) }
-                    disabled={ timeOver }
-                    className={ isClicked ? question.className : undefined }
-                    difficulty={ question.difficulty }
-                  >
-                    {question.answer}
-                  </button>
-                ),
+                (question) =>
+                  question.answer && (
+                    <button
+                      key={question.dataTestId}
+                      type='button'
+                      data-testid={question.dataTestId}
+                      onClick={() => this.handleButtonClick(question)}
+                      disabled={timeOver}
+                      className={`btn btn-primary btn-outline ${
+                        isClicked ? question.className : undefined
+                      } w-56`}
+                      difficulty={question.difficulty}>
+                      {question.answer}
+                    </button>
+                  )
               )}
             </div>
-            {isClicked && <NextButton onClick={ this.handleNextButton } />}
+            <div className='h-16'>
+              {isClicked && <NextButton onClick={this.handleNextButton} />}
+            </div>
           </div>
         )}
       </div>
