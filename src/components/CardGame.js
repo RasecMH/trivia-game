@@ -6,8 +6,7 @@ import { getToken } from '../services/saveToken';
 import './CardGame.css';
 import NextButton from './NextButton';
 import { score as saveScore } from '../store/Actions';
-// import { addInRanking } from '../services/saveRanking';
-// import createEmailUrl from '../services/createEmailUrl';
+import shuffleAnswers from '../services/shuffleAnswers';
 
 class CardGame extends React.Component {
   state = {
@@ -22,32 +21,16 @@ class CardGame extends React.Component {
   async componentDidMount() {
     const { history } = this.props;
     const ERROR_CODE = 3;
-    const CORRECT = 'btn-success correct-answer';
     const token = getToken();
     const response = await getQuestion(token);
     if (response.response_code === ERROR_CODE) {
       localStorage.removeItem('token');
       history.push('/');
     } else {
-      const SORT_NUMBER = 0.5;
-      const answerReceived = response.results.map((result) =>
-        [
-          {
-            answer: result.correct_answer,
-            className: CORRECT,
-            dataTestId: CORRECT,
-            difficulty: result.difficulty,
-          },
-          ...result.incorrect_answers.map((wrong, i) => ({
-            answer: wrong,
-            className: 'btn-error wrong-answer-${i}',
-            dataTestId: `wrong-answer-${i}`,
-            difficulty: result.difficulty,
-          })),
-        ].sort(() => SORT_NUMBER - Math.random())
-      );
-
-      this.setState({ questions: response.results, answers: answerReceived });
+      this.setState({
+        questions: response.results,
+        answers: shuffleAnswers(response.results),
+      });
     }
     this.startTimer();
   }
@@ -135,7 +118,7 @@ class CardGame extends React.Component {
             </p>
             <div
               data-testid='answer-options'
-              className='flex items-center justify-center gap-2 flex-wrap my-6 h-24'>
+              className='flex items-center justify-center flex-wrap h-24'>
               {answers[count].map(
                 (question) =>
                   question.answer && (
@@ -147,7 +130,7 @@ class CardGame extends React.Component {
                       disabled={timeOver}
                       className={`btn btn-primary btn-outline ${
                         isClicked ? question.className : undefined
-                      } w-80 `}
+                      } w-1/2 my-3`}
                       difficulty={question.difficulty}>
                       {question.answer}
                     </button>

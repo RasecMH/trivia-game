@@ -7,11 +7,10 @@ class NextButton extends Component {
     return (
       <div>
         <button
-          type="button"
-          onClick={ onClick }
-          data-testid="btn-next"
-          className='btn btn-outline btn-warning w-96 mt-3'
-        >
+          type='button'
+          onClick={onClick}
+          data-testid='btn-next'
+          className='btn btn-outline btn-warning w-96 mt-14'>
           Next
         </button>
       </div>

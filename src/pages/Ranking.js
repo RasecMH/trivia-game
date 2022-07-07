@@ -38,6 +38,7 @@ class Ranking extends React.Component {
                     className='flex items-center justify-evenly gap-4 text-white font-bold
                     border-solid border-2 border-pink-600 rounded-full text-3xl h-24 w-2/5
                     my-5'>
+                    <span>{index + 1}º</span>
                     <img
                       src={player.picture}
                       alt={player.name}
