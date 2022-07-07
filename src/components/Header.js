@@ -14,13 +14,13 @@ class Header extends React.Component {
     const { name, score } = this.props;
     return (
       <div className='flex items-center justify-evenly gap-4 text-white font-bold
-      border-solid border-2 border-pink-600 rounded-full text-3xl h-36
+      border-solid border-2 border-pink-600 rounded-full text-3xl h-24 w-1/2
       '>
         <img
           src={ this.createEmailUrl() }
           alt="profile-avatar"
           data-testid="header-profile-picture"
-          className='rounded-full w-24'
+          className='rounded-full w-20'
         />
           <p data-testid="header-player-name">
             {name}

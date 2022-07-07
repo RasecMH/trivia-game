@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import createEmailUrl from '../services/createEmailUrl';
 import { addInRanking } from '../services/saveRanking';
+import Header from '../components/Header';
 
 class Feedback extends React.Component {
   componentDidMount() {
@@ -33,35 +34,40 @@ class Feedback extends React.Component {
     const { name, gravatarEmail, score, assertions } = this.props;
     const MIN_ASSERTIONS = 3;
     return (
-      <div>
-        <header>
-          <img
-            data-testid="header-profile-picture"
-            src={ createEmailUrl(gravatarEmail) }
-            alt={ gravatarEmail }
-          />
-          <p data-testid="header-player-name">{name}</p>
-          <p data-testid="header-score">{score}</p>
-        </header>
-        <h1 data-testid="feedback-text">
-          {assertions < MIN_ASSERTIONS ? 'Could be better...' : 'Well Done!'}
-        </h1>
-        <p data-testid="feedback-total-score">{score}</p>
-        <p data-testid="feedback-total-question">{assertions}</p>
-        <button
-          type="button"
-          data-testid="btn-play-again"
-          onClick={ this.handleClick }
-        >
-          Play Again
-        </button>
-        <button
-          type="button"
-          data-testid="btn-ranking"
-          onClick={ this.handleClickRanking }
-        >
-          Ranking
-        </button>
+      <div className='h-screen w-screen'>
+        <div className='bg-black text-white w-screen h-screen flex items-center justify-center bg-[url("https://images.unsplash.com/photo-1511882150382-421056c89033?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8")] bg-cover blur'>
+        </div>
+        <div className='absolute w-3/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+          <div className='flex-col items-center justify-center'>
+            <div className='flex items-center justify-center'>
+              <Header />
+            </div>
+            <div className='flex items-center justify-center mt-12 text-center text-white text-3xl font-bold'>
+              <div className='flex-col items-center justify-center'>
+                <h1 data-testid="feedback-text">
+                  {assertions < MIN_ASSERTIONS ? 'Could be better...' : 'Well Done!'}
+                </h1>
+                <p data-testid="feedback-total-question">Acertos: {assertions}</p>
+                <button
+                  type="button"
+                  data-testid="btn-play-again"
+                  onClick={ this.handleClick }
+                  className='btn btn-secondary mr-5 mt-6'
+                  >
+                  Play Again
+                </button>
+                <button
+                  type="button"
+                  data-testid="btn-ranking"
+                  onClick={ this.handleClickRanking }
+                  className='btn btn-primary'
+                  >
+                  Ranking
+                </button>
+            </div>
+            </div>
+              </div>
+        </div>
       </div>
     );
   }
